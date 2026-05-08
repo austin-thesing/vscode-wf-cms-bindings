@@ -37,15 +37,27 @@ exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const webflowBindings_1 = require("./webflowBindings");
+const diagnostics_1 = require("./diagnostics");
+const locator_1 = require("./jsonld/locator");
+const parser_1 = require("./jsonld/parser");
+const data_1 = require("./schema/data");
+const recommender_1 = require("./schema/recommender");
 const CONFIG_SECTION = "webflowCmsBindings";
 const KEY_ENABLED = "enabled";
 const KEY_DISPLAY_MODE = "displayMode";
 const KEY_LANGUAGES = "languages";
 const KEY_DEBOUNCE = "debounceMs";
+const KEY_VALIDATE_ENABLED = "validate.enabled";
+const KEY_VALIDATE_SEVERITY = "validate.severity";
+const KEY_RECOMMEND_ENABLED = "recommend.enabled";
+const KEY_RECOMMEND_INCLUDE_GOOGLE_REQUIRED = "recommend.includeGoogleRequired";
 let highlightDecorationType;
 let pillDecorationType;
 const debounceTimers = new Map();
+const parsedRegionCache = new Map();
 function activate(context) {
+    const schemaData = (0, data_1.loadSchemaData)(context.extensionPath);
+    const diagnostics = vscode.languages.createDiagnosticCollection("webflow-cms-bindings");
     highlightDecorationType = vscode.window.createTextEditorDecorationType({
         borderRadius: "4px",
         border: "1px solid rgba(139, 92, 246, 0.55)",
@@ -78,7 +90,7 @@ function activate(context) {
             textDecoration: "none",
         },
     });
-    context.subscriptions.push(highlightDecorationType, pillDecorationType);
+    context.subscriptions.push(highlightDecorationType, pillDecorationType, diagnostics);
     const refresh = (editor) => {
         if (!editor || !highlightDecorationType || !pillDecorationType) {
             return;
@@ -94,6 +106,7 @@ function activate(context) {
         const text = editor.document.getText();
         const matches = (0, webflowBindings_1.findWebflowBindings)(text);
         const mode = getDisplayMode();
+        refreshSchemaDiagnostics(editor.document, diagnostics, schemaData);
         if (mode === "pill") {
             editor.setDecorations(highlightDecorationType, []);
             editor.setDecorations(pillDecorationType, matches.map((m) => toDecoration(editor.document, m, mode)));
@@ -122,6 +135,9 @@ function activate(context) {
             if (editor) {
                 refresh(editor);
             }
+            else {
+                refreshSchemaDiagnostics(document, diagnostics, schemaData);
+            }
         }, ms));
     };
     context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor((editor) => {
@@ -136,8 +152,13 @@ function activate(context) {
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((ev) => {
         if (ev.affectsConfiguration(CONFIG_SECTION)) {
             vscode.window.visibleTextEditors.forEach((ed) => refresh(ed));
+            for (const document of vscode.workspace.textDocuments) {
+                refreshSchemaDiagnostics(document, diagnostics, schemaData);
+            }
         }
     }));
+    context.subscriptions.push(registerCompletionProvider(schemaData));
+    context.subscriptions.push(registerCodeActionProvider(schemaData));
     context.subscriptions.push({
         dispose: () => {
             for (const t of debounceTimers.values()) {
@@ -158,6 +179,26 @@ function activate(context) {
         await config.update(KEY_DISPLAY_MODE, nextMode, vscode.ConfigurationTarget.Global);
         vscode.window.visibleTextEditors.forEach((ed) => refresh(ed));
         void vscode.window.showInformationMessage(`Webflow CMS Bindings display mode: ${nextMode}`);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand("webflowCmsBindings.validateSchema", () => {
+        const document = vscode.window.activeTextEditor?.document;
+        if (!document) {
+            return;
+        }
+        refreshSchemaDiagnostics(document, diagnostics, schemaData);
+        const count = diagnostics.get(document.uri)?.length ?? 0;
+        void vscode.window.showInformationMessage(count === 0
+            ? "Webflow schema validation found no issues."
+            : `Webflow schema validation found ${count} issue${count === 1 ? "" : "s"}.`);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand("webflowCmsBindings.insertRecommendedProperties", async (documentUri, action) => {
+        const document = vscode.workspace.textDocuments.find((d) => d.uri.toString() === documentUri.toString());
+        if (!document) {
+            return;
+        }
+        const edit = new vscode.WorkspaceEdit();
+        edit.insert(documentUri, document.positionAt(action.insertOffset), action.insertText);
+        await vscode.workspace.applyEdit(edit);
     }));
     refresh(vscode.window.activeTextEditor);
 }
@@ -185,9 +226,102 @@ function getDebounceMs() {
     const v = vscode.workspace.getConfiguration(CONFIG_SECTION).get(KEY_DEBOUNCE);
     return typeof v === "number" && !Number.isNaN(v) ? v : 100;
 }
+function getValidateEnabled() {
+    return vscode.workspace.getConfiguration(CONFIG_SECTION).get(KEY_VALIDATE_ENABLED) ?? true;
+}
+function getValidateSeverity() {
+    const value = vscode.workspace.getConfiguration(CONFIG_SECTION).get(KEY_VALIDATE_SEVERITY);
+    if (value === "error") {
+        return vscode.DiagnosticSeverity.Error;
+    }
+    if (value === "information") {
+        return vscode.DiagnosticSeverity.Information;
+    }
+    return vscode.DiagnosticSeverity.Warning;
+}
+function getRecommendEnabled() {
+    return vscode.workspace.getConfiguration(CONFIG_SECTION).get(KEY_RECOMMEND_ENABLED) ?? true;
+}
+function getIncludeGoogleRequired() {
+    return (vscode.workspace
+        .getConfiguration(CONFIG_SECTION)
+        .get(KEY_RECOMMEND_INCLUDE_GOOGLE_REQUIRED) ?? true);
+}
 function shouldDecorateDocument(document) {
     const allow = getLanguageAllowlist();
     return allow.includes(document.languageId);
+}
+function refreshSchemaDiagnostics(document, collection, data) {
+    if (!shouldDecorateDocument(document) || !getValidateEnabled()) {
+        collection.delete(document.uri);
+        parsedRegionCache.delete(document.uri.toString());
+        return;
+    }
+    const result = (0, diagnostics_1.buildSchemaDiagnostics)(document, data, getValidateSeverity(), getIncludeGoogleRequired());
+    parsedRegionCache.set(document.uri.toString(), result.parsedRegions);
+    collection.set(document.uri, result.diagnostics);
+}
+function registerCompletionProvider(schemaData) {
+    return vscode.languages.registerCompletionItemProvider(["html", "json", "jsonc"], {
+        provideCompletionItems(document, position) {
+            if (!getRecommendEnabled() || !shouldDecorateDocument(document)) {
+                return [];
+            }
+            const offset = document.offsetAt(position);
+            const regions = getParsedRegions(document);
+            const region = regions.find((r) => offset >= r.start && offset <= r.end);
+            if (!region) {
+                return [];
+            }
+            return (0, recommender_1.getCompletionsForKeyPosition)(region, offset, schemaData).map((recommendation) => {
+                const item = new vscode.CompletionItem(recommendation.propertyName, vscode.CompletionItemKind.Property);
+                item.insertText = new vscode.SnippetString(`"${recommendation.propertyName}": ${recommendation.snippetValue}`);
+                item.detail = recommendation.expectedTypes.length
+                    ? `schema.org: ${recommendation.expectedTypes.join(" | ")}`
+                    : "schema.org property";
+                if (recommendation.comment) {
+                    item.documentation = new vscode.MarkdownString(recommendation.comment);
+                }
+                return item;
+            });
+        },
+    }, '"');
+}
+function registerCodeActionProvider(schemaData) {
+    return vscode.languages.registerCodeActionsProvider(["html", "json", "jsonc"], {
+        provideCodeActions(document, range) {
+            if (!getRecommendEnabled() || !shouldDecorateDocument(document)) {
+                return [];
+            }
+            const offset = document.offsetAt(range.start);
+            const regions = getParsedRegions(document);
+            const region = regions.find((r) => offset >= r.start && offset <= r.end);
+            if (!region) {
+                return [];
+            }
+            const recommended = (0, recommender_1.getRecommendedActionAtOffset)(region, offset, schemaData);
+            if (!recommended) {
+                return [];
+            }
+            const action = new vscode.CodeAction(`Insert recommended properties for ${recommended.typeName}`, vscode.CodeActionKind.QuickFix);
+            action.command = {
+                command: "webflowCmsBindings.insertRecommendedProperties",
+                title: action.title,
+                arguments: [document.uri, recommended],
+            };
+            return [action];
+        },
+    }, { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] });
+}
+function getParsedRegions(document) {
+    const key = document.uri.toString();
+    const cached = parsedRegionCache.get(key);
+    if (cached) {
+        return cached;
+    }
+    const parsed = (0, parser_1.parseJsonLdRegions)((0, locator_1.findJsonLdRegions)(document.getText(), document.languageId, document.fileName));
+    parsedRegionCache.set(key, parsed);
+    return parsed;
 }
 function toDecoration(document, match, mode) {
     const startPos = document.positionAt(match.start);

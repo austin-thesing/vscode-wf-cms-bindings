@@ -2,7 +2,11 @@
 .vscode-test/**
 src/**
 test/**
+out/test/**
+scripts/**
+webflow-cms-binding-highlighter-*.vsix
 .gitignore
+.DS_Store
 **/tsconfig.json
 **/*.map
 node_modules/**

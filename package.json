@@ -2,7 +2,7 @@
   "name": "webflow-cms-binding-highlighter",
   "displayName": "Webflow CMS Binding Highlighter",
   "description": "Highlights Webflow CMS field bindings as inline pills in HTML, JSON, and JS files.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -61,6 +61,31 @@
           "default": 100,
           "minimum": 0,
           "description": "Delay in milliseconds before refreshing decorations after edits."
+        },
+        "webflowCmsBindings.validate.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate JSON-LD schema blocks while ignoring Webflow CMS bindings."
+        },
+        "webflowCmsBindings.validate.severity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "information"
+          ],
+          "default": "warning",
+          "description": "Diagnostic severity for schema.org type/property and missing required-property issues."
+        },
+        "webflowCmsBindings.recommend.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show schema.org property completions and recommended-field quick fixes."
+        },
+        "webflowCmsBindings.recommend.includeGoogleRequired": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Google rich-result required and recommended fields in diagnostics and quick fixes."
         }
       }
     },
@@ -72,6 +97,14 @@
       {
         "command": "webflowCmsBindings.toggleDisplayMode",
         "title": "Webflow CMS Bindings: Toggle Pill Display"
+      },
+      {
+        "command": "webflowCmsBindings.validateSchema",
+        "title": "Webflow CMS Bindings: Validate Schema"
+      },
+      {
+        "command": "webflowCmsBindings.insertRecommendedProperties",
+        "title": "Webflow CMS Bindings: Insert Recommended Properties"
       }
     ]
   },
@@ -81,7 +114,11 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "mocha \"out/test/**/*.test.js\"",
-    "package": "vsce package --skip-license --allow-package-all-secrets"
+    "package": "vsce package --skip-license --allow-package-all-secrets",
+    "build:schema": "tsc scripts/build-schema-data.ts --module commonjs --target ES2020 --lib ES2020,DOM --outDir out/scripts --esModuleInterop --skipLibCheck && node out/scripts/scripts/build-schema-data.js"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",

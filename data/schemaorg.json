@@ -1,0 +1,245 @@
+{
+  "types": {
+    "Thing": {
+      "parents": [],
+      "properties": ["additionalType", "alternateName", "description", "disambiguatingDescription", "identifier", "image", "mainEntityOfPage", "name", "potentialAction", "sameAs", "subjectOf", "url"]
+    },
+    "CreativeWork": {
+      "parents": ["Thing"],
+      "properties": ["about", "abstract", "accessMode", "accessModeSufficient", "accessibilityAPI", "accessibilityControl", "accessibilityFeature", "accessibilityHazard", "accessibilitySummary", "accountablePerson", "aggregateRating", "alternativeHeadline", "associatedMedia", "audience", "audio", "author", "award", "character", "citation", "comment", "commentCount", "conditionsOfAccess", "contentLocation", "contentRating", "contentReferenceTime", "contributor", "copyrightHolder", "copyrightNotice", "copyrightYear", "correction", "creativeWorkStatus", "creator", "creditText", "dateCreated", "dateModified", "datePublished", "discussionUrl", "editEIDR", "editor", "educationalAlignment", "educationalLevel", "educationalUse", "encoding", "encodingFormat", "exampleOfWork", "expires", "funder", "genre", "hasPart", "headline", "inLanguage", "interactionStatistic", "interactivityType", "interpretedAsClaim", "isAccessibleForFree", "isBasedOn", "isFamilyFriendly", "isPartOf", "keywords", "learningResourceType", "license", "locationCreated", "mainEntity", "maintainer", "material", "mentions", "offers", "pattern", "position", "producer", "provider", "publication", "publisher", "publisherImprint", "publishingPrinciples", "recordedAt", "releasedEvent", "review", "schemaVersion", "sdDatePublished", "sdLicense", "sdPublisher", "size", "sourceOrganization", "spatial", "spatialCoverage", "sponsor", "teaches", "temporal", "temporalCoverage", "text", "thumbnail", "thumbnailUrl", "timeRequired", "translationOfWork", "translator", "typicalAgeRange", "usageInfo", "version", "video", "workExample", "workTranslation"]
+    },
+    "Article": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["articleBody", "articleSection", "backstory", "pageEnd", "pageStart", "pagination", "speakable", "wordCount"]
+    },
+    "NewsArticle": {
+      "parents": ["Article", "CreativeWork", "Thing"],
+      "properties": ["dateline", "printColumn", "printEdition", "printPage", "printSection"]
+    },
+    "BlogPosting": {
+      "parents": ["Article", "CreativeWork", "Thing"],
+      "properties": []
+    },
+    "Recipe": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["cookTime", "cookingMethod", "nutrition", "prepTime", "recipeCategory", "recipeCuisine", "recipeIngredient", "recipeInstructions", "recipeYield", "suitableForDiet", "totalTime"]
+    },
+    "FAQPage": {
+      "parents": ["WebPage", "CreativeWork", "Thing"],
+      "properties": ["mainEntity"]
+    },
+    "Question": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["acceptedAnswer", "answerCount", "downvoteCount", "eduQuestionType", "suggestedAnswer", "upvoteCount"]
+    },
+    "Answer": {
+      "parents": ["Comment", "CreativeWork", "Thing"],
+      "properties": ["answerExplanation", "parentItem", "upvoteCount"]
+    },
+    "WebPage": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["breadcrumb", "lastReviewed", "primaryImageOfPage", "relatedLink", "reviewedBy", "significantLink", "speakable", "specialty"]
+    },
+    "WebSite": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["issn"]
+    },
+    "ImageObject": {
+      "parents": ["MediaObject", "CreativeWork", "Thing"],
+      "properties": ["caption", "exifData", "representativeOfPage", "thumbnail"]
+    },
+    "VideoObject": {
+      "parents": ["MediaObject", "CreativeWork", "Thing"],
+      "properties": ["actor", "caption", "director", "embeddedTextCaption", "musicBy", "transcript", "videoFrameSize", "videoQuality"]
+    },
+    "MediaObject": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["associatedArticle", "bitrate", "contentSize", "contentUrl", "duration", "embedUrl", "encodesCreativeWork", "encodingFormat", "endTime", "height", "ineligibleRegion", "playerType", "productionCompany", "regionsAllowed", "requiresSubscription", "sha256", "startTime", "uploadDate", "width"]
+    },
+    "Product": {
+      "parents": ["Thing"],
+      "properties": ["aggregateRating", "audience", "award", "brand", "category", "color", "countryOfAssembly", "countryOfLastProcessing", "countryOfOrigin", "depth", "gtin", "gtin12", "gtin13", "gtin14", "gtin8", "hasAdultConsideration", "hasEnergyConsumptionDetails", "hasGS1DigitalLink", "hasMeasurement", "hasMerchantReturnPolicy", "height", "inProductGroupWithID", "isAccessoryOrSparePartFor", "isConsumableFor", "isFamilyFriendly", "isRelatedTo", "isSimilarTo", "isVariantOf", "itemCondition", "keywords", "logo", "manufacturer", "material", "mobileUrl", "model", "mpn", "negativeNotes", "nsn", "offers", "pattern", "positiveNotes", "productID", "productionDate", "purchaseDate", "releaseDate", "review", "size", "sku", "slogan", "weight", "width"]
+    },
+    "Offer": {
+      "parents": ["Thing"],
+      "properties": ["acceptedPaymentMethod", "addOn", "advanceBookingRequirement", "aggregateRating", "areaServed", "asin", "availability", "availabilityEnds", "availabilityStarts", "availableAtOrFrom", "availableDeliveryMethod", "businessFunction", "category", "checkoutPageURLTemplate", "deliveryLeadTime", "eligibleCustomerType", "eligibleDuration", "eligibleQuantity", "eligibleRegion", "eligibleTransactionVolume", "gtin", "gtin12", "gtin13", "gtin14", "gtin8", "hasAdultConsideration", "hasGS1DigitalLink", "hasMeasurement", "hasMerchantReturnPolicy", "includesObject", "ineligibleRegion", "inventoryLevel", "itemCondition", "itemOffered", "leaseLength", "mobileUrl", "mpn", "offeredBy", "price", "priceCurrency", "priceSpecification", "priceValidUntil", "review", "seller", "serialNumber", "shippingDetails", "sku", "validFrom", "validThrough", "warranty"]
+    },
+    "AggregateOffer": {
+      "parents": ["Offer", "Thing"],
+      "properties": ["highPrice", "lowPrice", "offerCount", "offers"]
+    },
+    "AggregateRating": {
+      "parents": ["Rating", "Intangible", "Thing"],
+      "properties": ["itemReviewed", "ratingCount", "reviewCount"]
+    },
+    "Rating": {
+      "parents": ["Intangible", "Thing"],
+      "properties": ["author", "bestRating", "ratingExplanation", "ratingValue", "reviewAspect", "worstRating"]
+    },
+    "Review": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["associatedClaimReview", "itemReviewed", "negativeNotes", "positiveNotes", "reviewAspect", "reviewBody", "reviewRating"]
+    },
+    "Organization": {
+      "parents": ["Thing"],
+      "properties": ["actionableFeedbackPolicy", "address", "aggregateRating", "alumni", "areaServed", "award", "brand", "contactPoint", "correctionsPolicy", "department", "dissolutionDate", "diversityPolicy", "diversityStaffingReport", "duns", "email", "employee", "ethicsPolicy", "event", "faxNumber", "founder", "foundingDate", "foundingLocation", "funder", "globalLocationNumber", "hasCertification", "hasCredential", "hasMerchantReturnPolicy", "hasOfferCatalog", "hasPOS", "interactionStatistic", "iso6523Code", "keywords", "knowsAbout", "knowsLanguage", "legalName", "leiCode", "location", "logo", "makesOffer", "member", "memberOf", "naics", "nonprofitStatus", "numberOfEmployees", "ownershipFundingInfo", "parentOrganization", "publishingPrinciples", "review", "seeks", "slogan", "sponsor", "subOrganization", "taxID", "telephone", "unnamedSourcesPolicy", "vatID"]
+    },
+    "LocalBusiness": {
+      "parents": ["Organization", "Place", "Thing"],
+      "properties": ["currenciesAccepted", "openingHours", "paymentAccepted", "priceRange"]
+    },
+    "Place": {
+      "parents": ["Thing"],
+      "properties": ["additionalProperty", "address", "aggregateRating", "amenityFeature", "branchCode", "containedInPlace", "containsPlace", "event", "faxNumber", "geo", "geoContains", "geoCoveredBy", "geoCovers", "geoCrosses", "geoDisjoint", "geoEquals", "geoIntersects", "geoOverlaps", "geoTouches", "geoWithin", "globalLocationNumber", "hasCertification", "hasDriveThroughService", "hasMap", "isAccessibleForFree", "keywords", "latitude", "logo", "longitude", "maximumAttendeeCapacity", "openingHoursSpecification", "photo", "publicAccess", "review", "smokingAllowed", "specialOpeningHoursSpecification", "telephone", "tourBookingPage"]
+    },
+    "Event": {
+      "parents": ["Thing"],
+      "properties": ["about", "actor", "aggregateRating", "attendee", "audience", "composer", "contributor", "director", "doorTime", "duration", "endDate", "eventAttendanceMode", "eventSchedule", "eventStatus", "funder", "inLanguage", "isAccessibleForFree", "keywords", "location", "maximumAttendeeCapacity", "maximumPhysicalAttendeeCapacity", "maximumVirtualAttendeeCapacity", "offers", "organizer", "performer", "previousStartDate", "recordedIn", "remainingAttendeeCapacity", "review", "sponsor", "startDate", "subEvent", "superEvent", "translator", "typicalAgeRange", "workFeatured", "workPerformed"]
+    },
+    "BreadcrumbList": {
+      "parents": ["ItemList", "Intangible", "Thing"],
+      "properties": []
+    },
+    "ItemList": {
+      "parents": ["Intangible", "Thing"],
+      "properties": ["itemListElement", "itemListOrder", "numberOfItems"]
+    },
+    "ListItem": {
+      "parents": ["Intangible", "Thing"],
+      "properties": ["item", "nextItem", "position", "previousItem"]
+    },
+    "Intangible": {
+      "parents": ["Thing"],
+      "properties": []
+    },
+    "Person": {
+      "parents": ["Thing"],
+      "properties": ["additionalName", "address", "affiliation", "alumniOf", "award", "birthDate", "birthPlace", "brand", "children", "colleague", "contactPoint", "deathDate", "deathPlace", "duns", "email", "familyName", "faxNumber", "follows", "funder", "gender", "givenName", "globalLocationNumber", "hasCertification", "hasCredential", "hasOccupation", "hasOfferCatalog", "hasPOS", "height", "homeLocation", "honorificPrefix", "honorificSuffix", "interactionStatistic", "isicV4", "jobTitle", "knows", "knowsAbout", "knowsLanguage", "makesOffer", "memberOf", "naics", "nationality", "netWorth", "owns", "parent", "performerIn", "publishingPrinciples", "relatedTo", "seeks", "sibling", "sponsor", "spouse", "taxID", "telephone", "vatID", "weight", "workLocation", "worksFor"]
+    },
+    "Comment": {
+      "parents": ["CreativeWork", "Thing"],
+      "properties": ["downvoteCount", "parentItem", "upvoteCount"]
+    },
+    "SearchAction": {
+      "parents": ["Action", "Thing"],
+      "properties": ["query", "query-input", "target"]
+    },
+    "Action": {
+      "parents": ["Thing"],
+      "properties": ["actionProcess", "actionStatus", "agent", "endTime", "error", "instrument", "location", "object", "participant", "result", "startTime", "target"]
+    },
+    "EntryPoint": {
+      "parents": ["Intangible", "Thing"],
+      "properties": ["actionApplication", "actionPlatform", "contentType", "encodingType", "httpMethod", "urlTemplate"]
+    },
+    "PostalAddress": {
+      "parents": ["ContactPoint", "StructuredValue", "Intangible", "Thing"],
+      "properties": ["addressCountry", "addressLocality", "addressRegion", "postOfficeBoxNumber", "postalCode", "streetAddress"]
+    },
+    "ContactPoint": {
+      "parents": ["StructuredValue", "Intangible", "Thing"],
+      "properties": ["areaServed", "availableLanguage", "contactOption", "contactType", "email", "faxNumber", "hoursAvailable", "productSupported", "telephone"]
+    },
+    "StructuredValue": {
+      "parents": ["Intangible", "Thing"],
+      "properties": []
+    },
+    "GeoCoordinates": {
+      "parents": ["StructuredValue", "Intangible", "Thing"],
+      "properties": ["address", "addressCountry", "elevation", "latitude", "longitude", "postalCode"]
+    },
+    "OpeningHoursSpecification": {
+      "parents": ["StructuredValue", "Intangible", "Thing"],
+      "properties": ["closes", "dayOfWeek", "opens", "validFrom", "validThrough"]
+    },
+    "MonetaryAmount": {
+      "parents": ["StructuredValue", "Intangible", "Thing"],
+      "properties": ["currency", "maxValue", "minValue", "validFrom", "validThrough", "value"]
+    },
+    "PriceSpecification": {
+      "parents": ["StructuredValue", "Intangible", "Thing"],
+      "properties": ["eligibleQuantity", "eligibleTransactionVolume", "maxPrice", "minPrice", "price", "priceCurrency", "validFrom", "validThrough", "valueAddedTaxIncluded"]
+    }
+  },
+  "properties": {
+    "@context": { "expectedTypes": ["URL", "Text"], "comment": "JSON-LD context URL." },
+    "@type": { "expectedTypes": ["Text"], "comment": "Schema.org type for this object." },
+    "@id": { "expectedTypes": ["URL"], "comment": "Stable identifier for this entity." },
+    "name": { "expectedTypes": ["Text"], "comment": "The name of the item." },
+    "description": { "expectedTypes": ["Text"], "comment": "A description of the item." },
+    "image": { "expectedTypes": ["ImageObject", "URL"], "comment": "An image of the item." },
+    "url": { "expectedTypes": ["URL"], "comment": "URL of the item." },
+    "sameAs": { "expectedTypes": ["URL"], "comment": "Reference URLs that identify the item." },
+    "headline": { "expectedTypes": ["Text"], "comment": "Headline of the article or creative work." },
+    "author": { "expectedTypes": ["Organization", "Person"], "comment": "Author of the creative work." },
+    "publisher": { "expectedTypes": ["Organization", "Person"], "comment": "Publisher of the creative work." },
+    "datePublished": { "expectedTypes": ["Date", "DateTime"], "comment": "Date of first publication." },
+    "dateModified": { "expectedTypes": ["Date", "DateTime"], "comment": "Date on which the item was most recently modified." },
+    "mainEntityOfPage": { "expectedTypes": ["CreativeWork", "URL"], "comment": "Page or work that primarily describes this thing." },
+    "mainEntity": { "expectedTypes": ["Thing"], "comment": "Primary entity described in the page." },
+    "articleBody": { "expectedTypes": ["Text"], "comment": "The actual body of the article." },
+    "articleSection": { "expectedTypes": ["Text"], "comment": "Articles may belong to one or more sections." },
+    "keywords": { "expectedTypes": ["Text", "URL"], "comment": "Keywords or tags used to describe this content." },
+    "recipeIngredient": { "expectedTypes": ["Text"], "comment": "Ingredient used in the recipe." },
+    "recipeInstructions": { "expectedTypes": ["CreativeWork", "ItemList", "Text"], "comment": "Steps to make the recipe." },
+    "prepTime": { "expectedTypes": ["Duration"], "comment": "Time required to prepare the recipe." },
+    "cookTime": { "expectedTypes": ["Duration"], "comment": "Time required to cook the recipe." },
+    "totalTime": { "expectedTypes": ["Duration"], "comment": "Total time required." },
+    "recipeYield": { "expectedTypes": ["QuantitativeValue", "Text"], "comment": "Quantity produced by the recipe." },
+    "recipeCategory": { "expectedTypes": ["Text"], "comment": "Recipe category." },
+    "recipeCuisine": { "expectedTypes": ["Text"], "comment": "Recipe cuisine." },
+    "nutrition": { "expectedTypes": ["NutritionInformation"], "comment": "Nutrition information about the recipe." },
+    "offers": { "expectedTypes": ["Offer", "AggregateOffer"], "comment": "Offer to sell, rent, or otherwise provide this item." },
+    "price": { "expectedTypes": ["Number", "Text"], "comment": "Offer price." },
+    "priceCurrency": { "expectedTypes": ["Text"], "comment": "Currency used for the price." },
+    "availability": { "expectedTypes": ["ItemAvailability"], "comment": "Availability status." },
+    "priceValidUntil": { "expectedTypes": ["Date"], "comment": "Date after which the price is no longer available." },
+    "sku": { "expectedTypes": ["Text"], "comment": "Merchant-specific stock keeping unit." },
+    "brand": { "expectedTypes": ["Brand", "Organization"], "comment": "Brand associated with the product." },
+    "aggregateRating": { "expectedTypes": ["AggregateRating"], "comment": "Overall rating based on multiple ratings or reviews." },
+    "ratingValue": { "expectedTypes": ["Number", "Text"], "comment": "Rating value." },
+    "ratingCount": { "expectedTypes": ["Integer"], "comment": "Count of ratings." },
+    "reviewCount": { "expectedTypes": ["Integer"], "comment": "Count of reviews." },
+    "review": { "expectedTypes": ["Review"], "comment": "Review of the item." },
+    "reviewRating": { "expectedTypes": ["Rating"], "comment": "Rating given in this review." },
+    "reviewBody": { "expectedTypes": ["Text"], "comment": "Body text of the review." },
+    "itemReviewed": { "expectedTypes": ["Thing"], "comment": "Item that is being reviewed." },
+    "address": { "expectedTypes": ["PostalAddress", "Text"], "comment": "Physical address." },
+    "streetAddress": { "expectedTypes": ["Text"], "comment": "Street address." },
+    "addressLocality": { "expectedTypes": ["Text"], "comment": "City or locality." },
+    "addressRegion": { "expectedTypes": ["Text"], "comment": "Region or state." },
+    "postalCode": { "expectedTypes": ["Text"], "comment": "Postal code." },
+    "addressCountry": { "expectedTypes": ["Country", "Text"], "comment": "Country." },
+    "telephone": { "expectedTypes": ["Text"], "comment": "Telephone number." },
+    "email": { "expectedTypes": ["Text"], "comment": "Email address." },
+    "openingHours": { "expectedTypes": ["Text"], "comment": "Opening hours as text." },
+    "openingHoursSpecification": { "expectedTypes": ["OpeningHoursSpecification"], "comment": "Structured opening hours." },
+    "geo": { "expectedTypes": ["GeoCoordinates", "GeoShape"], "comment": "Geographic coordinates or shape." },
+    "latitude": { "expectedTypes": ["Number", "Text"], "comment": "Latitude." },
+    "longitude": { "expectedTypes": ["Number", "Text"], "comment": "Longitude." },
+    "startDate": { "expectedTypes": ["Date", "DateTime"], "comment": "Start date and time." },
+    "endDate": { "expectedTypes": ["Date", "DateTime"], "comment": "End date and time." },
+    "location": { "expectedTypes": ["Place", "PostalAddress", "Text"], "comment": "Location of the event or organization." },
+    "organizer": { "expectedTypes": ["Organization", "Person"], "comment": "Event organizer." },
+    "performer": { "expectedTypes": ["Organization", "Person"], "comment": "Event performer." },
+    "eventStatus": { "expectedTypes": ["EventStatusType"], "comment": "Event status." },
+    "eventAttendanceMode": { "expectedTypes": ["EventAttendanceModeEnumeration"], "comment": "How the event may be attended." },
+    "itemListElement": { "expectedTypes": ["ListItem", "Text", "Thing"], "comment": "Item in an ordered or unordered list." },
+    "position": { "expectedTypes": ["Integer", "Text"], "comment": "Position of an item in a list or series." },
+    "item": { "expectedTypes": ["Thing", "URL"], "comment": "Entity or URL represented by a list item." },
+    "acceptedAnswer": { "expectedTypes": ["Answer"], "comment": "Accepted answer to a question." },
+    "suggestedAnswer": { "expectedTypes": ["Answer"], "comment": "Suggested answer to a question." },
+    "text": { "expectedTypes": ["Text"], "comment": "Text content." },
+    "uploadDate": { "expectedTypes": ["Date", "DateTime"], "comment": "Date when media was uploaded." },
+    "duration": { "expectedTypes": ["Duration"], "comment": "Duration of the item." },
+    "contentUrl": { "expectedTypes": ["URL"], "comment": "Actual bytes of media content." },
+    "embedUrl": { "expectedTypes": ["URL"], "comment": "Embed URL for media." },
+    "thumbnailUrl": { "expectedTypes": ["URL"], "comment": "Thumbnail image URL." },
+    "potentialAction": { "expectedTypes": ["Action"], "comment": "Potential action for this item." },
+    "target": { "expectedTypes": ["EntryPoint", "URL"], "comment": "Target entry point for an action." },
+    "query-input": { "expectedTypes": ["Text"], "comment": "SearchAction query input specification." },
+    "logo": { "expectedTypes": ["ImageObject", "URL"], "comment": "Associated logo." },
+    "contactPoint": { "expectedTypes": ["ContactPoint"], "comment": "Contact point for an organization or person." },
+    "contactType": { "expectedTypes": ["Text"], "comment": "Type of contact point." }
+  }
+}
