@@ -22,7 +22,10 @@ Paste the PAT when prompted. `vsce` stores it for future publishes.
 
 ```bash
 npm test
+npm run test:artifact
 ```
+
+The artifact regression check runs normal `vsce` secret scanning, checks `vsce ls` and the actual VSIX for the runtime parser and development/sensitive files, then loads the extracted entry point in isolation with only the editor API stubbed. It requires `unzip` on PATH and does not replace the real editor smoke test. Generated VSIX files are ignored by git.
 
 4. Build a local package:
 
