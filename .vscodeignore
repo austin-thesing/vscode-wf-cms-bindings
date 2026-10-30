@@ -9,3 +9,5 @@ webflow-cms-binding-highlighter-*.vsix
 .DS_Store
 **/tsconfig.json
 **/*.map
+.cursor/**
+docs/**

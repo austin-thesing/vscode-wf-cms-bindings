@@ -114,8 +114,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "mocha \"out/test/**/*.test.js\"",
-    "package": "vsce package --skip-license --allow-package-all-secrets",
-    "build:schema": "tsc scripts/build-schema-data.ts --module commonjs --target ES2020 --lib ES2020,DOM --outDir out/scripts --esModuleInterop --skipLibCheck && node out/scripts/scripts/build-schema-data.js"
+    "package": "vsce package --skip-license",
+    "build:schema": "tsc scripts/build-schema-data.ts --module commonjs --target ES2020 --lib ES2020,DOM --outDir out/scripts --esModuleInterop --skipLibCheck && node out/scripts/scripts/build-schema-data.js",
+    "test:artifact": "node scripts/check-artifact.cjs"
   },
   "dependencies": {
     "jsonc-parser": "^3.3.1"
